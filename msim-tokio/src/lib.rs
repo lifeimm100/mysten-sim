@@ -14,6 +14,15 @@ mod sim {
     pub mod task {
         pub use crate::runtime::LocalSet;
         pub use msim::task::*;
+
+        /// Compat shim: tokio::task::block_in_place does not exist in msim.
+        /// For simulation we just run the closure inline; this keeps APIs compiling.
+        pub fn block_in_place<F, R>(f: F) -> R
+        where
+            F: FnOnce() -> R,
+        {
+            f()
+        }
     }
 
     #[cfg(feature = "rt")]

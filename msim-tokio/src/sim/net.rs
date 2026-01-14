@@ -408,6 +408,10 @@ impl TcpStream {
         tcp::split_owned(self)
     }
 
+    pub fn split(self) -> (tcp::OwnedReadHalf, tcp::OwnedWriteHalf) {
+        self.into_split()
+    }
+
     fn poll_write_priv(&self, _cx: &mut Context<'_>, buf: &[u8]) -> Poll<io::Result<usize>> {
         let num = buf.len();
         let tag = self.state.next_send_tag();
